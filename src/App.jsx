@@ -11,12 +11,16 @@ function App() {
       style={{ backgroundImage: "url('/bg.png')" }}
     >
       <HeaderTitle />
-      <div className="flex flex-1 flex-row">
+      <div className="flex flex-1 flex-row h-[80%]">
         <div className="w-[55%]">
-          <div className="flex flex-col h-[10%] overflow-hidden">
+          <div className="h-[50%]">
+            <LaporanPanel />
+          </div>
+          <div className="h-[45%]">
             <LaporanPanel />
           </div>
         </div>
+
         <div className="w-[45%]">
           <VideoPlayer />
         </div>
