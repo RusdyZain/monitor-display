@@ -1,4 +1,3 @@
-import React from "react";
 import HeaderTitle from "./components/HeaderTitle";
 import LaporanPanel from "./components/LaporanPanel";
 import VideoPlayer from "./components/VideoPlayer";
@@ -7,13 +6,13 @@ import "./index.css";
 
 function App() {
   return (
-    <div className="app-container">
+    <div className="flex flex-col h-screen w-screen overflow-hidden font-sans">
       <HeaderTitle />
-      <div className="content">
-        <div className="laporan">
+      <div className="flex flex-1 flex-row">
+        <div className="w-[40%]">
           <LaporanPanel />
         </div>
-        <div className="video">
+        <div className="w-[60%]">
           <VideoPlayer />
         </div>
       </div>
