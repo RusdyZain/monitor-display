@@ -28,20 +28,33 @@ const LaporanPanel = () => {
   return (
     <div
       ref={containerRef}
-      className="h-full overflow-y-scroll p-4 bg-gray-900 text-white"
+      className="overflow-y-scroll bg-gray-900 text-white h-[30%]  rounded-xl border-8 border-[#352c29] my-2 mx-2"
+      style={{
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+        WebkitOverflowScrolling: "touch",
+      }}
     >
+      <style>
+        {`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}
+      </style>
       <Document
         file="/pdfs/Laporan.pdf"
         onLoadSuccess={({ numPages }) => setNumPages(numPages)}
         onLoadError={(err) => console.error("PDF load error:", err)}
         loading={<p>Memuat PDF...</p>}
         error={<p>Gagal memuat PDF</p>}
+        className="flex flex-col items-center"
       >
         {Array.from(new Array(numPages), (_, i) => (
           <Page
             key={i}
             pageNumber={i + 1}
-            width={350}
+            scale={0.59}
             renderTextLayer={false}
             renderAnnotationLayer={false}
           />

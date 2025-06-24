@@ -6,13 +6,18 @@ import "./index.css";
 
 function App() {
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden font-sans">
+    <div
+      className="flex flex-col h-screen w-screen overflow-hidden font-sans bg-cover bg-center"
+      style={{ backgroundImage: "url('/bg.png')" }}
+    >
       <HeaderTitle />
       <div className="flex flex-1 flex-row">
-        <div className="w-[40%]">
-          <LaporanPanel />
+        <div className="w-[55%]">
+          <div className="flex flex-col h-[10%] overflow-hidden">
+            <LaporanPanel />
+          </div>
         </div>
-        <div className="w-[60%]">
+        <div className="w-[45%]">
           <VideoPlayer />
         </div>
       </div>
