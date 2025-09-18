@@ -52,7 +52,9 @@ const LaporanPanel = ({
           {title}
         </h2>
         {subtitle ? (
-          <p className="text-xs font-medium text-white/80 md:text-sm">{subtitle}</p>
+          <p className="text-xs font-medium text-white/80 md:text-sm">
+            {subtitle}
+          </p>
         ) : null}
       </div>
       <div className="relative flex-1 overflow-hidden px-4 py-4">
@@ -76,8 +78,14 @@ const LaporanPanel = ({
             file={file}
             onLoadSuccess={({ numPages: pages }) => setNumPages(pages)}
             onLoadError={(err) => console.error("PDF load error:", err)}
-            loading={<p className="text-center text-sm text-white/60">Memuat PDF…</p>}
-            error={<p className="text-center text-sm text-red-300">Gagal memuat PDF</p>}
+            loading={
+              <p className="text-center text-sm text-white/60">Memuat PDF…</p>
+            }
+            error={
+              <p className="text-center text-sm text-red-300">
+                Gagal memuat PDF
+              </p>
+            }
             className="flex flex-col items-center gap-8"
           >
             {pagesToRender.map((pageNumber) => (

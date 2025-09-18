@@ -34,13 +34,18 @@ const HeaderTitle = () => {
 
         {/* Tengah - Logo, Nama Instansi, Alamat */}
         <div className="flex max-w-3xl flex-1 flex-col items-center text-center md:flex-row md:items-center md:justify-center md:gap-5">
-          <img src="/dokkes.png" alt="Logo NTB" className="h-14 w-auto drop-shadow" />
+          <img
+            src="/dokkes.png"
+            alt="Logo NTB"
+            className="h-14 w-auto drop-shadow"
+          />
           <div className="mt-3 flex flex-col md:mt-0">
             <h1 className="text-2xl font-extrabold leading-tight md:text-4xl">
               BIDDOKKES POLDA NTB
             </h1>
             <p className="mt-1 text-xs font-medium text-white/80 md:text-sm">
-              Jl. Majapahit No.12A, Taman Sari, Kec. Ampenan, Kota Mataram, Nusa Tenggara Barat 83112
+              Jl. Majapahit No.12A, Taman Sari, Kec. Ampenan, Kota Mataram, Nusa
+              Tenggara Barat 83112
             </p>
           </div>
         </div>

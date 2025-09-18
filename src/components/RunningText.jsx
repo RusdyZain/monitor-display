@@ -6,7 +6,9 @@ const RunningText = () => (
       </span>
       <div className="relative flex-1 overflow-hidden">
         <div className="animate-marquee whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-black md:text-base">
-          Selamat datang di Biddokkes Polda NTB – Bidang Kedokteran & Kesehatan Polda NTB, melayani pelayanan kedokteran forensik, DVI & kesehatan kepolisian.
+          Selamat datang di Biddokkes Polda NTB – Bidang Kedokteran & Kesehatan
+          Polda NTB, melayani pelayanan kedokteran forensik, DVI & kesehatan
+          kepolisian.
         </div>
       </div>
     </div>

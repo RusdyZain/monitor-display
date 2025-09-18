@@ -19,7 +19,10 @@ function App() {
         style={{ backgroundImage: "url('/bg.png')" }}
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm" aria-hidden="true" />
+      <div
+        className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm"
+        aria-hidden="true"
+      />
       <div className="relative z-10 flex h-full min-h-0 flex-col">
         <HeaderTitle />
         <main className="flex-1 overflow-hidden px-6 pb-6 pt-4 min-h-0">
