@@ -1,70 +1,96 @@
 import { Document, Page } from "react-pdf";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 
-const LaporanPanel = () => {
+const LaporanPanel = ({
+  title = "LAPORAN REALISASI SP2D TA 2025",
+  subtitle,
+  file = "/pdfs/Laporan.pdf",
+  pageScale = 0.62,
+  maxPages,
+  autoScroll = true,
+  scrollStep = 1,
+  scrollDelay = 45,
+  className = "",
+}) => {
   const [numPages, setNumPages] = useState(0);
   const containerRef = useRef(null);
 
   useEffect(() => {
+    if (!autoScroll) return undefined;
+
     const scrollInterval = setInterval(() => {
       const container = containerRef.current;
       if (!container) return;
 
-      container.scrollTop += 1;
+      container.scrollTop += scrollStep;
 
       if (
         container.scrollTop + container.clientHeight >=
-        container.scrollHeight
+        container.scrollHeight - scrollStep
       ) {
         container.scrollTop = 0;
       }
-    }, 50);
+    }, scrollDelay);
 
     return () => clearInterval(scrollInterval);
-  }, []);
+  }, [autoScroll, scrollDelay, scrollStep]);
+
+  const pagesToRender = useMemo(() => {
+    if (!numPages) return [];
+    const total = maxPages ? Math.min(maxPages, numPages) : numPages;
+    return Array.from({ length: total }, (_, index) => index + 1);
+  }, [maxPages, numPages]);
 
   return (
-    <div className="h-[100%] rounded-xl border-8 border-[#352c29] my-2 mx-2 bg-gray-900 text-white">
-      <div className="bg-[#352c29] text-center py-2 font-extrabold text-xl">
-        LAPORAN REALISASI SP2D TA 2025
+    <div
+      className={`relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/30 bg-white/10 text-white shadow-[0_25px_70px_-35px_rgba(0,0,0,0.85)] backdrop-blur ${className}`.trim()}
+    >
+      <div className="flex flex-col gap-1 border-b border-white/20 bg-gradient-to-r from-[#352c29] via-[#1f4d3a] to-[#009b4d] px-5 py-3">
+        <h2 className="text-xl font-extrabold uppercase tracking-wide drop-shadow-sm">
+          {title}
+        </h2>
+        {subtitle ? (
+          <p className="text-xs font-medium text-white/80 md:text-sm">{subtitle}</p>
+        ) : null}
       </div>
-      <div
-        ref={containerRef}
-        className="overflow-y-scroll px-4"
-        style={{
-          height: "calc(100% - 2.5rem)",
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-          WebkitOverflowScrolling: "touch",
-        }}
-      >
-        <style>
-          {`
-            div::-webkit-scrollbar {
-              display: none;
-            }
-          `}
-        </style>
-        <Document
-          file="/pdfs/Laporan.pdf"
-          onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-          onLoadError={(err) => console.error("PDF load error:", err)}
-          loading={<p>Memuat PDF...</p>}
-          error={<p>Gagal memuat PDF</p>}
-          className="flex flex-col items-center"
+      <div className="relative flex-1 overflow-hidden px-4 py-4">
+        <div
+          ref={containerRef}
+          className="custom-scroll relative h-full overflow-y-auto rounded-2xl bg-black/60 p-4 shadow-inner"
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            WebkitOverflowScrolling: "touch",
+          }}
         >
-          {Array.from(new Array(numPages), (_, i) => (
-            <Page
-              key={i}
-              pageNumber={i + 1}
-              scale={0.59}
-              renderTextLayer={false}
-              renderAnnotationLayer={false}
-            />
-          ))}
-        </Document>
+          <style>
+            {`
+              .custom-scroll::-webkit-scrollbar {
+                display: none;
+              }
+            `}
+          </style>
+          <Document
+            file={file}
+            onLoadSuccess={({ numPages: pages }) => setNumPages(pages)}
+            onLoadError={(err) => console.error("PDF load error:", err)}
+            loading={<p className="text-center text-sm text-white/60">Memuat PDF…</p>}
+            error={<p className="text-center text-sm text-red-300">Gagal memuat PDF</p>}
+            className="flex flex-col items-center gap-8"
+          >
+            {pagesToRender.map((pageNumber) => (
+              <Page
+                key={pageNumber}
+                pageNumber={pageNumber}
+                scale={pageScale}
+                renderTextLayer={false}
+                renderAnnotationLayer={false}
+              />
+            ))}
+          </Document>
+        </div>
       </div>
     </div>
   );
