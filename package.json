@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serve:dist": "node server.cjs",
+    "package:win": "npm run build && pkg server.cjs --targets node18-win-x64 --output build/monitor-display.exe"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
@@ -21,12 +23,17 @@
     "globals": "^16.0.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "pkg": "^5.8.1"
   },
   "dependencies": {
     "pdfjs-dist": "^3.4.120",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-pdf": "^6.2.2"
+    "react-pdf": "^6.2.2",
+    "serve-handler": "^6.1.5",
+    "open": "^8.4.2",
+    "readable-stream": "^4.5.2",
+    "inherits": "^2.0.4"
   }
 }

@@ -47,12 +47,12 @@ const LaporanPanel = ({
     <div
       className={`relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/30 bg-white/10 text-white shadow-[0_25px_70px_-35px_rgba(0,0,0,0.85)] backdrop-blur ${className}`.trim()}
     >
-      <div className="flex flex-col gap-1 border-b border-white/20 bg-gradient-to-r from-[#352c29] via-[#1f4d3a] to-[#009b4d] px-5 py-3">
+      <div className="flex flex-row items-center gap-3 border-b border-white/20 bg-gradient-to-r from-[#352c29] via-[#1f4d3a] to-[#009b4d] px-5 py-3">
         <h2 className="text-xl font-extrabold uppercase tracking-wide drop-shadow-sm">
           {title}
         </h2>
         {subtitle ? (
-          <p className="text-xs font-medium text-white/80 md:text-sm">
+          <p className="ml-auto text-right text-xs font-medium text-white/80 md:text-sm">
             {subtitle}
           </p>
         ) : null}

@@ -61,3 +61,12 @@ Folder `dist/` siap dipublikasikan ke server statis.
 ---
 
 Dikembangkan untuk kebutuhan tampilan monitor internal BIDDOKKES POLDA NTB.
+## Paket Desktop Sederhana
+
+1. Jalankan `npm install` (sekali saja) untuk memastikan dependensi server ringan terpasang.
+2. Buat build statis dengan `npm run build` sehingga folder `dist/` terisi.
+3. Bungkus server menjadi executable Windows dengan `npm run package:win`.
+
+Perintah di atas menghasilkan `build/monitor-display.exe`. Letakkan file `.exe` tersebut berdampingan dengan folder `dist/` (yang berisi PDF, video, dan asset lainnya), lalu jalankan. Aplikasi akan menyalakan server lokal otomatis dan membuka browser ke `http://localhost:4173`. Jika tidak ingin browser terbuka otomatis, jalankan dengan `AUTO_OPEN=false monitor-display.exe`.
+
+Untuk mengetes tanpa membuat `.exe`, gunakan `npm run serve:dist` setelah `npm run build`; perintah ini menyalakan server yang sama langsung dari Node.js.
