@@ -1,5 +1,11 @@
 import { Document, Page } from "react-pdf";
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 
@@ -7,7 +13,7 @@ const LaporanPanel = ({
   title = "LAPORAN REALISASI SP2D TA 2025",
   subtitle,
   file = "/pdfs/Laporan.pdf",
-  pageScale = 0.62,
+  pageScale,
   maxPages,
   autoScroll = true,
   scrollStep = 1,
@@ -15,7 +21,32 @@ const LaporanPanel = ({
   className = "",
 }) => {
   const [numPages, setNumPages] = useState(0);
+  const [pageWidth, setPageWidth] = useState(0);
   const containerRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (typeof ResizeObserver === "undefined") {
+      return undefined;
+    }
+
+    const element = contentRef.current;
+    if (!element) {
+      return undefined;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+
+      const nextWidth = Math.round(entry.contentRect.width);
+      setPageWidth((prev) => (prev !== nextWidth ? nextWidth : prev));
+    });
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!autoScroll) return undefined;
@@ -42,6 +73,18 @@ const LaporanPanel = ({
     const total = maxPages ? Math.min(maxPages, numPages) : numPages;
     return Array.from({ length: total }, (_, index) => index + 1);
   }, [maxPages, numPages]);
+
+  const pageProps = useMemo(() => {
+    if (pageScale != null) {
+      return { scale: pageScale };
+    }
+
+    if (pageWidth) {
+      return { width: pageWidth };
+    }
+
+    return {};
+  }, [pageScale, pageWidth]);
 
   return (
     <div
@@ -74,30 +117,33 @@ const LaporanPanel = ({
               }
             `}
           </style>
-          <Document
-            file={file}
-            onLoadSuccess={({ numPages: pages }) => setNumPages(pages)}
-            onLoadError={(err) => console.error("PDF load error:", err)}
-            loading={
-              <p className="text-center text-sm text-white/60">Memuat PDF…</p>
-            }
-            error={
-              <p className="text-center text-sm text-red-300">
-                Gagal memuat PDF
-              </p>
-            }
-            className="flex flex-col items-center gap-8"
-          >
-            {pagesToRender.map((pageNumber) => (
-              <Page
-                key={pageNumber}
-                pageNumber={pageNumber}
-                scale={pageScale}
-                renderTextLayer={false}
-                renderAnnotationLayer={false}
-              />
-            ))}
-          </Document>
+          <div ref={contentRef} className="flex w-full flex-col">
+            <Document
+              file={file}
+              onLoadSuccess={({ numPages: pages }) => setNumPages(pages)}
+              onLoadError={(err) => console.error("PDF load error:", err)}
+              loading={
+                <p className="text-center text-sm text-white/60">Memuat PDF...</p>
+              }
+              error={
+                <p className="text-center text-sm text-red-300">
+                  Gagal memuat PDF
+                </p>
+              }
+              className="flex w-full flex-col gap-8"
+            >
+              {pagesToRender.map((pageNumber) => (
+                <div key={pageNumber} className="flex w-full justify-center">
+                  <Page
+                    pageNumber={pageNumber}
+                    renderTextLayer={false}
+                    renderAnnotationLayer={false}
+                    {...pageProps}
+                  />
+                </div>
+              ))}
+            </Document>
+          </div>
         </div>
       </div>
     </div>
@@ -105,3 +151,4 @@ const LaporanPanel = ({
 };
 
 export default LaporanPanel;
+

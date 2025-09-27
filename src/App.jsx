@@ -31,16 +31,12 @@ function App() {
               <LaporanPanel
                 subtitle={`Update terakhir: ${lastUpdated}`}
                 className="flex-[3]"
-                maxPages={1}
-                pageScale={0.6}
-                autoScroll={true}
+                autoScroll
               />
               <LaporanPanel
                 title="Rincian Halaman Utama"
                 subtitle="Ringkasan halaman pertama untuk peninjauan cepat"
-                maxPages={1}
-                pageScale={0.6}
-                autoScroll={true}
+                autoScroll
                 className="flex-[2]"
               />
             </div>
@@ -61,3 +57,5 @@ function App() {
 }
 
 export default App;
+
+
