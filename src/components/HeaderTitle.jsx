@@ -1,7 +1,7 @@
 // File: src/components/HeaderTitle.jsx
 import React, { useEffect, useState } from "react";
 
-const HeaderTitle = () => {
+const HeaderTitle = ({ onConfigure }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -50,12 +50,24 @@ const HeaderTitle = () => {
           </div>
         </div>
 
-        {/* Kanan - Jam */}
-        <div className="flex flex-col items-end leading-tight">
-          <span className="text-2xl font-extrabold md:text-4xl">{jam}</span>
-          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.45em] text-white/70 md:text-sm">
-            Wita
-          </span>
+        {/* Kanan - Jam dan tombol */}
+        <div className="flex flex-col items-end gap-2 leading-tight md:flex-row md:items-center md:gap-4">
+          {onConfigure ? (
+            <button
+              type="button"
+              onClick={onConfigure}
+              className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 transition hover:bg-white/30 hover:text-white md:px-4"
+            >
+              <span className="block h-2 w-2 rounded-full bg-emerald-300" aria-hidden="true" />
+              Pengaturan
+            </button>
+          ) : null}
+          <div className="flex flex-col items-end leading-tight">
+            <span className="text-2xl font-extrabold md:text-4xl">{jam}</span>
+            <span className="text-[0.65rem] font-semibold uppercase tracking-[0.45em] text-white/70 md:text-sm">
+              Wita
+            </span>
+          </div>
         </div>
       </div>
     </header>
@@ -63,3 +75,4 @@ const HeaderTitle = () => {
 };
 
 export default HeaderTitle;
+

@@ -1,72 +1,70 @@
-# 🏥 Monitor Display BIDDOKKES POLDA NTB
+﻿# Monitor Display BIDDOKKES POLDA NTB
 
-Monitor digital ini menampilkan laporan realisasi, video profil, informasi moto, dan ticker berita agar mudah dibaca pada layar TV kantor.
+Aplikasi layar penuh untuk menampilkan laporan PDF, video profil, moto organisasi, dan teks berjalan pada monitor kantor.
 
-## ✨ Fitur Utama
+## Fitur Utama
 
-- **Layout full-screen** tanpa scrollbar halaman agar tampilan selalu rapih di monitor.
-- **Panel laporan PDF** dengan auto-scroll dan opsi ringkasan halaman pertama.
-- **Video profil** looping otomatis 24/7.
-- **Moto card** berisi pesan organisasi dengan aksen warna instansi.
-- **Running ticker** animasi untuk menonjolkan pesan penting.
+- Panel PDF dengan auto-scroll serta dukungan multi halaman.
+- Pemutar video looping dengan kontrol volume (bawaan browser).
+- Header dinamis berisi tanggal, jam, dan tombol ``Pengaturan``.
+- Modal pengaturan yang memungkinkan unggah PDF/video langsung ke server.
+- Teks berjalan dan elemen visual yang disesuaikan dengan identitas instansi.
 
-## 🧱 Struktur Proyek
+## Menjalankan Secara Lokal
 
-```
-monitor-display/
-├── public/
-│   ├── bg.png                # background utama
-│   ├── dokkes.png            # logo BIDDOKKES
-│   ├── pdfs/Laporan.pdf      # dokumen yang ditampilkan
-│   └── videos/Video.mp4      # video profil
-├── src/
-│   ├── components/
-│   │   ├── HeaderTitle.jsx   # header tanggal, logo, jam
-│   │   ├── LaporanPanel.jsx  # panel PDF dengan auto-scroll
-│   │   ├── VideoPlayer.jsx   # komponen pemutar video
-│   │   ├── MotoTagline.jsx   # kartu moto organisasi
-│   │   └── RunningText.jsx   # teks berjalan bagian bawah
-│   ├── App.jsx               # komposisi layout utama
-│   ├── index.css             # reset dan utilitas global
-│   └── main.jsx              # entry React
-├── index.html
-└── package.json
-```
-
-## 🚀 Menjalankan Aplikasi Lokal
-
-Pastikan Node.js 18+ tersedia, lalu:
+Pastikan Node.js 18+ tersedia.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Buka URL yang tertera (biasanya `http://localhost:5173`).
+Buka URL yang tercetak (biasanya `http://localhost:5173`).
 
-## 🛠️ Build Produksi
+## Build Produksi
 
 ```bash
 npm run build
 ```
 
-Folder `dist/` siap dipublikasikan ke server statis.
+Folder `dist/` berisi aset siap rilis. Untuk menayangkan build secara lokal gunakan:
 
-## 📄 Konfigurasi & Catatan
+```bash
+npm run serve:dist
+```
 
-- Styling utama menggunakan Tailwind CSS.
-- Tailwind mengandalkan konfigurasi di `tailwind.config.js`.
-- Komponen PDF memanfaatkan library `react-pdf`. Saat build, akan muncul peringatan `eval` dari `pdfjs-dist`; ini datang dari dependensi upstream dan aman diabaikan untuk keperluan display internal.
+## Paket Desktop Sederhana
+
+1. Jalankan `npm run build`.
+2. Eksekusi `npm run package:win` untuk membuat `build/monitor-display.exe`.
+3. Letakkan executable berdampingan dengan folder `dist/` berisi aset.
+4. Jalankan `monitor-display.exe` (atau `AUTO_OPEN=false monitor-display.exe` bila tidak ingin membuka browser otomatis).
+
+## Konfigurasi Aset
+
+- Tekan tombol ``Pengaturan`` pada header untuk membuka modal konfigurasi.
+- Anda dapat mengunggah file langsung dari komputer (akan tersimpan ke `dist/uploads/`) atau mengetik jalur relatif/URL publik secara manual.
+- Saat menekan **Simpan**, aplikasi memanggil API `POST /api/assets` yang menulis konfigurasi ke `dist/config/assets.json`. Nilai ini otomatis dipakai oleh tampilan utama tanpa perlu restart server.
+
+Jika memilih mengelola file secara manual tanpa fitur unggah:
+
+1. Taruh PDF di `public/pdfs/` dan video di `public/videos/` (sebelum build) atau langsung di `dist/pdfs/` dan `dist/videos/` (setelah build).
+2. Ubah `public/config/assets.json` sebelum build, atau edit `dist/config/assets.json` setelah build lalu refresh tampilan.
+3. Pastikan jalur yang dituliskan dapat diakses oleh browser (contoh `/pdfs/Laporan-terbaru.pdf` atau URL eksternal).
+
+> Catatan: Browser tidak bisa membaca file dari path lokal seperti `C:\Dokumen\laporan.pdf`. File harus disajikan oleh server (misalnya berada di dalam folder `dist/`).
+
+## API Lokal
+
+Server produksi ringan (`server.cjs`) menambahkan endpoint berikut:
+
+- `GET /api/assets` – mengembalikan konfigurasi aset aktif.
+- `POST /api/assets` – memperbarui konfigurasi aset.
+- `POST /api/upload?type=pdf|video` – menyimpan file ke `dist/uploads/` dan mengembalikan jalur relatifnya.
+
+Semua endpoint bekerja pada server yang dijalankan melalui `npm run serve:dist` atau executable hasil `npm run package:win`.
 
 ---
 
-Dikembangkan untuk kebutuhan tampilan monitor internal BIDDOKKES POLDA NTB.
-## Paket Desktop Sederhana
+Developed for internal display needs of BIDDOKKES POLDA NTB.
 
-1. Jalankan `npm install` (sekali saja) untuk memastikan dependensi server ringan terpasang.
-2. Buat build statis dengan `npm run build` sehingga folder `dist/` terisi.
-3. Bungkus server menjadi executable Windows dengan `npm run package:win`.
-
-Perintah di atas menghasilkan `build/monitor-display.exe`. Letakkan file `.exe` tersebut berdampingan dengan folder `dist/` (yang berisi PDF, video, dan asset lainnya), lalu jalankan. Aplikasi akan menyalakan server lokal otomatis dan membuka browser ke `http://localhost:4173`. Jika tidak ingin browser terbuka otomatis, jalankan dengan `AUTO_OPEN=false monitor-display.exe`.
-
-Untuk mengetes tanpa membuat `.exe`, gunakan `npm run serve:dist` setelah `npm run build`; perintah ini menyalakan server yang sama langsung dari Node.js.

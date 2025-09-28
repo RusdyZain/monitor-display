@@ -1,6 +1,6 @@
 import React from "react";
 
-const VideoPlayer = ({ className = "" }) => (
+const VideoPlayer = ({ className = "", src = "/videos/Video.mp4" }) => (
   <div className={`flex h-full w-full flex-col ${className}`.trim()}>
     <div className="flex flex-wrap items-center justify-between gap-2">
       <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-white/70 md:text-base">
@@ -12,7 +12,7 @@ const VideoPlayer = ({ className = "" }) => (
     </div>
     <div className="relative mt-3 flex flex-1 overflow-hidden rounded-2xl bg-black/70 shadow-inner ring-1 ring-white/15">
       <video
-        src="/videos/Video.mp4"
+        src={src}
         controls
         autoPlay
         loop
@@ -24,3 +24,4 @@ const VideoPlayer = ({ className = "" }) => (
 );
 
 export default VideoPlayer;
+
