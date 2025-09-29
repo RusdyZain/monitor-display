@@ -1,4 +1,4 @@
-﻿const http = require('http');
+const http = require('http');
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
@@ -16,6 +16,7 @@ const DEFAULT_ASSETS = {
   primaryPdf: '/pdfs/Laporan.pdf',
   secondaryPdf: '/pdfs/Laporan.pdf',
   video: '/videos/Video.mp4',
+  runningText: 'Selamat datang di Biddokkes Polda NTB - Bidang Kedokteran & Kesehatan Polda NTB, melayani pelayanan kedokteran forensik, DVI & kesehatan kepolisian.',
 };
 
 const MAX_UPLOAD_MB = Number(process.env.MAX_UPLOAD_MB || 200);

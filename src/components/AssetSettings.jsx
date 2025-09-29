@@ -1,4 +1,4 @@
-﻿// File: src/components/AssetSettings.jsx
+// File: src/components/AssetSettings.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const formFields = [
@@ -26,6 +26,15 @@ const formFields = [
     accept: "video/*",
     uploadType: "video",
   },
+  {
+    key: "runningText",
+    label: "Teks berjalan",
+    placeholder: "Selamat datang di Biddokkes Polda NTB - Bidang Kedokteran & Kesehatan Polda NTB, melayani pelayanan kedokteran forensik, DVI & kesehatan kepolisian.",
+    helper: "Muncul pada strip informasi berjalan di bagian bawah layar.",
+    multiline: true,
+    maxLength: 320,
+    rows: 3,
+  },
 ];
 
 const normalizeAssets = (assets) => {
@@ -48,7 +57,7 @@ const statusStyles = {
 
 const AssetSettings = ({ assets, onClose, onSave }) => {
   const initialState = useMemo(
-    () => ({ primaryPdf: "", secondaryPdf: "", video: "", ...normalizeAssets(assets) }),
+    () => ({ primaryPdf: "", secondaryPdf: "", video: "", runningText: "", ...normalizeAssets(assets) }),
     [assets]
   );
   const [formState, setFormState] = useState(initialState);
@@ -175,45 +184,78 @@ const AssetSettings = ({ assets, onClose, onSave }) => {
           Unggah file dari komputer Anda atau masukkan jalur relatif terhadap server (contoh `/pdfs/Laporan.pdf`).
         </p>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {formFields.map(({ key, label, placeholder, helper, accept }) => (
-            <div key={key} className="flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-white/70">
-                {label}
-              </span>
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-                <input
-                  type="text"
-                  name={key}
-                  value={formState[key] ?? ""}
-                  onChange={handleChange}
-                  placeholder={placeholder}
-                  className="flex-1 rounded-2xl border border-white/20 bg-slate-900/70 px-4 py-3 text-sm text-white shadow-inner outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                />
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => triggerFileDialog(key)}
-                    disabled={uploadingKey === key}
-                    className="inline-flex items-center rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-white/80 transition hover:bg-white/25 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {uploadingKey === key ? "Mengunggah..." : "Unggah"}
-                  </button>
-                  <input
-                    ref={(node) => {
-                      if (node) {
-                        fileInputsRef.current[key] = node;
-                      }
-                    }}
-                    type="file"
-                    accept={accept}
-                    className="hidden"
-                    onChange={(event) => handleFileSelected(key, event)}
-                  />
+          {formFields.map(
+            ({
+              key,
+              label,
+              placeholder,
+              helper,
+              accept,
+              uploadType,
+              multiline,
+              rows = 3,
+              maxLength,
+            }) => {
+              const containerClasses = uploadType
+                ? "flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3"
+                : "flex flex-col gap-2";
+              const commonInputClasses =
+                "flex-1 rounded-2xl border border-white/20 bg-slate-900/70 px-4 py-3 text-sm text-white shadow-inner outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40";
+              return (
+                <div key={key} className="flex flex-col gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-[0.3em] text-white/70">
+                    {label}
+                  </span>
+                  <div className={containerClasses}>
+                    {multiline ? (
+                      <textarea
+                        name={key}
+                        value={formState[key] ?? ""}
+                        onChange={handleChange}
+                        placeholder={placeholder}
+                        rows={rows}
+                        maxLength={typeof maxLength === "number" ? maxLength : undefined}
+                        className={`${commonInputClasses} min-h-[7rem] resize-y leading-relaxed`}
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        name={key}
+                        value={formState[key] ?? ""}
+                        onChange={handleChange}
+                        placeholder={placeholder}
+                        className={commonInputClasses}
+                      />
+                    )}
+                    {uploadType ? (
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => triggerFileDialog(key)}
+                          disabled={uploadingKey === key}
+                          className="inline-flex items-center rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-white/80 transition hover:bg-white/25 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {uploadingKey === key ? "Mengunggah..." : "Unggah"}
+                        </button>
+                        <input
+                          ref={(node) => {
+                            if (node) {
+                              fileInputsRef.current[key] = node;
+                            }
+                          }}
+                          type="file"
+                          accept={accept}
+                          className="hidden"
+                          onChange={(event) => handleFileSelected(key, event)}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                  <span className="text-xs text-white/50">{helper}</span>
                 </div>
-              </div>
-              <span className="text-xs text-white/50">{helper}</span>
-            </div>
-          ))}
+              );
+            }
+          )}
           <div className="mt-2 flex items-center justify-between gap-4">
             <div className="text-xs text-white/60">
               Setelah menyimpan, tampilan utama otomatis memakai jalur terbaru.

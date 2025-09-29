@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AssetSettings from "./components/AssetSettings";
 import HeaderTitle from "./components/HeaderTitle";
 import LaporanPanel from "./components/LaporanPanel";
@@ -11,6 +11,7 @@ const DEFAULT_ASSETS = {
   primaryPdf: "/pdfs/Laporan.pdf",
   secondaryPdf: "/pdfs/Laporan.pdf",
   video: "/videos/Video.mp4",
+  runningText: "Selamat datang di Biddokkes Polda NTB - Bidang Kedokteran & Kesehatan Polda NTB, melayani pelayanan kedokteran forensik, DVI & kesehatan kepolisian.",
 };
 
 function App() {
@@ -90,7 +91,7 @@ function App() {
             </div>
           </div>
         </main>
-        <RunningText />
+        <RunningText text={assets.runningText} />
       </div>
       {isSettingsOpen ? (
         <AssetSettings
